@@ -1,0 +1,4 @@
+node_modules/
+the-last-ember/build/
+*.mkv
+__pycache__/

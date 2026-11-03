@@ -1,0 +1,13 @@
+{
+  "name": "the-last-ember-render",
+  "version": "1.0.0",
+  "private": true,
+  "description": "PS1/PS2-style low-poly renderer for THE LAST EMBER (three.js in headless Chromium). Requires Playwright with Chromium installed.",
+  "scripts": {
+    "render": "node render.cjs film video ../build/frames.mkv 0 64"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "three": "0.170.0"
+  }
+}
