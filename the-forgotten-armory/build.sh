@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+# Rebuilds VHALDREN — EPISODE 3: THE ARMOR THAT WOULD LAST FOREVER end to end.
+# Reuses Episode 1-2 engine, Cael Vorn rig, synthesis toolkits and fonts (../the-last-ember).
+set -euo pipefail
+ROOT="$(cd "$(dirname "$0")" && pwd)"; EP1="$ROOT/../the-last-ember"
+WORK="${WORK:-$ROOT/build}"; MODELS="${MODELS:-$EP1/build/models}"
+VOICE="${VOICE:-bm_george:0.7,am_fenrir:0.3}"   # identical narrator to Episode 1
+mkdir -p "$WORK" "$MODELS" "$ROOT/output" "$ROOT/images"
+REL=https://github.com/thewh1teagle/kokoro-onnx/releases/download/model-files-v1.0
+[ -f "$MODELS/kokoro-v1.0.onnx" ] || curl -sSL -o "$MODELS/kokoro-v1.0.onnx" "$REL/kokoro-v1.0.onnx"
+[ -f "$MODELS/voices-v1.0.bin" ] || curl -sSL -o "$MODELS/voices-v1.0.bin" "$REL/voices-v1.0.bin"
+( cd "$EP1/render" && [ -d node_modules/three ] || npm install --no-audit --no-fund )
+
+echo "== narration";        python3 "$ROOT/audio/tts.py" "$MODELS" "$WORK/vo_raw" "$VOICE" 0.92
+echo "== frames";           node "$ROOT/render/render.cjs" film video "$WORK/frames.mkv" 0 63
+echo "== scene images";     node "$ROOT/render/render.cjs" film stills "$WORK/scenes" 3.5,12.6,19.2,21.0,22.8,24.3,33.2,42.2,54.2,57.6
+echo "== character sheet";  node "$ROOT/render/render.cjs" sheet stills "$WORK/sheet" 0.5,1.5,2.5,3.5,4.5,5.5,6.5,7.5
+echo "== score + sound";    python3 "$ROOT/audio/synth.py" "$WORK/vo_raw" "$WORK/audio"
+echo "== subtitles";        python3 "$ROOT/audio/make_subs.py" "$WORK/vo_raw/durations.json" "$WORK/subs.ass"
+echo "== assemble"
+ffmpeg -y -loglevel error -i "$WORK/frames.mkv" -i "$WORK/audio/mix.wav" -filter_complex \
+  "[0:v]noise=alls=5:allf=t,scale=1080:1920:flags=neighbor,subtitles=$WORK/subs.ass:fontsdir=$EP1/assets/fonts,format=yuv420p[v];[1:a]loudnorm=I=-14:TP=-1.5:LRA=11,aresample=48000[a]" \
+  -map "[v]" -map "[a]" -c:v libx264 -preset slow -crf 22 -maxrate 5500k -bufsize 11M -profile:v high -r 30 -c:a aac -b:a 192k -movflags +faststart -shortest \
+  "$ROOT/output/the_armor_that_would_last_forever.mp4"
+python3 "$ROOT/render/export_images.py" "$WORK/scenes" "$WORK/sheet" "$ROOT/images" "$EP1/assets/fonts"
+echo "done -> $ROOT/output/the_armor_that_would_last_forever.mp4"
