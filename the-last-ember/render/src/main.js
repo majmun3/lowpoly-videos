@@ -29,7 +29,7 @@ function renderAt(t) {
   renderPost();
 }
 window.load = async (name) => {
-  const m = await import('./' + name + '.js');
+  const m = await import(name.startsWith('/') ? name : './' + name + '.js');
   SHOTS = m.SHOTS; FX = m.FX || FX; cache = new Map();
   return { duration: m.DURATION ?? SHOTS[SHOTS.length - 1].end, shots: SHOTS.map(s => [s.id, s.start, s.end]) };
 };

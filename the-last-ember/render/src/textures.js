@@ -40,6 +40,8 @@ function pixels(x, w, h, fn) {
 const C = (v) => Math.max(0, Math.min(255, v | 0));
 
 export function T(name) { if (!cache[name]) cache[name] = MAKERS[name](); return cache[name]; }
+// helpers exported for other episodes' texture sets
+export { mk, fbm, noiseField, pixels, C as clampByte, MAKERS };
 
 const MAKERS = {
   // Grey-brown cut stone blocks with dark mortar and ash streaks

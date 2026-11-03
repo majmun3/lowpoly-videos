@@ -4,7 +4,7 @@ import { T } from './textures.js';
 
 // ---------------------------------------------------------------- humanoid rig (segmented, PS1 style)
 const JOINTS = ['pelvis', 'spine', 'chest', 'neck', 'head', 'shL', 'armL', 'foreL', 'handL', 'shR', 'armR', 'foreR', 'handR', 'thighL', 'shinL', 'footL', 'thighR', 'shinR', 'footR'];
-function rig(d) {
+export function rig(d) {
   const root = new THREE.Group(); const j = { root };
   j.pelvis = group(root, [0, d.hip, 0]);
   j.spine = group(j.pelvis, [0, d.spineOff, 0]);
