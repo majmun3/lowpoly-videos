@@ -13,5 +13,6 @@ Original low-poly / retro-3D (PS1/PS2-style) short videos: the **VHALDREN** dark
 | Short | Video |
 |---|---|
 | [WHAT IF YOU WERE BORN AS A DRAGON?](born-as-a-dragon/) | [`what_if_you_were_born_as_a_dragon.mp4`](born-as-a-dragon/output/what_if_you_were_born_as_a_dragon.mp4) |
+| [WHAT IF YOU WERE BORN AS A GOBLIN?](born-as-a-goblin/) | [`what_if_you_were_born_as_a_goblin.mp4`](born-as-a-goblin/output/what_if_you_were_born_as_a_goblin.mp4) |
 
 **Cael Vorn's permanent design (Episode 3 onward):** [`CAEL_VORN_CANON.md`](CAEL_VORN_CANON.md), built by `buildCaelVigil()` in [`the-forgotten-armory/render/src/vigil.js`](the-forgotten-armory/render/src/vigil.js).
