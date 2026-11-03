@@ -1,0 +1,56 @@
+[Script Info]
+ScriptType: v4.00+
+PlayResX: 1080
+PlayResY: 1920
+WrapStyle: 0
+ScaledBorderAndShadow: yes
+
+[V4+ Styles]
+Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
+Style: Sub,Cinzel,74,&H00F6F4F2,&H000000FF,&H00100808,&H96000000,-1,0,0,0,100,100,1,0,1,5,3,2,70,70,600,1
+Style: Hook,Cinzel,58,&H00F6F4F2,&H000000FF,&H00100808,&H96000000,-1,0,0,0,100,100,1,0,1,3.5,2,8,80,80,250,1
+Style: Title,Cinzel,84,&H00E8F2FA,&H000000FF,&H00081020,&H00000000,-1,0,0,0,100,100,4,0,1,3,0,5,60,60,0,1
+Style: Ask,Cinzel,52,&H00F6F4F2,&H000000FF,&H00100808,&H96000000,-1,0,0,0,100,100,1,0,1,3,0,2,80,80,700,1
+
+[Events]
+Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
+Dialogue: 0,0:00:00.00,0:00:04.50,Hook,,0,0,0,,{\fad(0,300)}WHAT IF YOU WERE\N{\c&H2A8CFF&}BORN AS A DRAGON?
+Dialogue: 0,0:00:00.20,0:00:01.93,Sub,,0,0,0,,{\c&HF2F4F6&}WHAT IF YOU WEREN'T BORN HUMAN...
+Dialogue: 0,0:00:01.93,0:00:03.18,Sub,,0,0,0,,{\c&HF2F4F6&}BUT AS THE {\c&H2A8CFF&}MOST FEARED{\c&HF2F4F6&}
+Dialogue: 0,0:00:03.18,0:00:04.50,Sub,,0,0,0,,{\c&HF2F4F6&}CREATURE IN THE WORLD?
+Dialogue: 0,0:00:04.70,0:00:06.30,Sub,,0,0,0,,{\c&HF2F4F6&}YOU HATCHED IN DARKNESS,
+Dialogue: 0,0:00:06.30,0:00:08.13,Sub,,0,0,0,,{\c&HF2F4F6&}BENEATH A SLEEPING VOLCANO.
+Dialogue: 0,0:00:08.35,0:00:08.89,Sub,,0,0,0,,{\c&HF2F4F6&}SMALL.
+Dialogue: 0,0:00:08.89,0:00:09.39,Sub,,0,0,0,,{\c&HF2F4F6&}WEAK.
+Dialogue: 0,0:00:09.39,0:00:10.01,Sub,,0,0,0,,{\c&HF2F4F6&}ALONE.
+Dialogue: 0,0:00:10.30,0:00:11.62,Sub,,0,0,0,,{\c&HF2F4F6&}BY YOUR FIFTH WINTER,
+Dialogue: 0,0:00:11.62,0:00:13.47,Sub,,0,0,0,,{\c&HF2F4F6&}YOU FOUND THE {\c&H2A8CFF&}FIRE{\c&HF2F4F6&} INSIDE YOU.
+Dialogue: 0,0:00:14.10,0:00:15.49,Sub,,0,0,0,,{\c&HF2F4F6&}BUT {\c&H2A8CFF&}FIRE{\c&HF2F4F6&} CAN BE SEEN
+Dialogue: 0,0:00:15.49,0:00:16.90,Sub,,0,0,0,,{\c&HF2F4F6&}FROM VERY FAR AWAY.
+Dialogue: 0,0:00:17.10,0:00:18.89,Sub,,0,0,0,,{\c&HF2F4F6&}THE HUMANS SENT {\c&H2A8CFF&}HUNTERS{\c&HF2F4F6&}.
+Dialogue: 0,0:00:19.20,0:00:19.96,Sub,,0,0,0,,{\c&HF2F4F6&}SO YOU RAN.
+Dialogue: 0,0:00:19.96,0:00:20.59,Sub,,0,0,0,,{\c&HF2F4F6&}YOU HID.
+Dialogue: 0,0:00:20.59,0:00:21.35,Sub,,0,0,0,,{\c&HF2F4F6&}YOU GREW.
+Dialogue: 0,0:00:21.70,0:00:22.42,Sub,,0,0,0,,{\c&HF2F4F6&}AT TWENTY,
+Dialogue: 0,0:00:22.42,0:00:23.50,Sub,,0,0,0,,{\c&HF2F4F6&}YOU {\c&H2A8CFF&}FOUGHT BACK{\c&HF2F4F6&}.
+Dialogue: 0,0:00:25.20,0:00:26.19,Sub,,0,0,0,,{\c&HF2F4F6&}AT ONE HUNDRED,
+Dialogue: 0,0:00:26.19,0:00:27.68,Sub,,0,0,0,,{\c&HF2F4F6&}YOU BLOTTED OUT {\c&H2A8CFF&}THE SUN{\c&HF2F4F6&}.
+Dialogue: 0,0:00:28.00,0:00:29.05,Sub,,0,0,0,,{\c&HF2F4F6&}THE KINGDOMS STOPPED
+Dialogue: 0,0:00:29.05,0:00:30.18,Sub,,0,0,0,,{\c&HF2F4F6&}FIGHTING EACH OTHER...
+Dialogue: 0,0:00:30.18,0:00:31.03,Sub,,0,0,0,,{\c&HF2F4F6&}{\c&H2A8CFF&}TO FIGHT YOU{\c&HF2F4F6&}.
+Dialogue: 0,0:00:32.30,0:00:33.42,Sub,,0,0,0,,{\c&HF2F4F6&}BUT THEY WEREN'T AFRAID
+Dialogue: 0,0:00:33.42,0:00:34.23,Sub,,0,0,0,,{\c&HF2F4F6&}OF YOUR {\c&H2A8CFF&}FIRE{\c&HF2F4F6&}.
+Dialogue: 0,0:00:34.50,0:00:35.84,Sub,,0,0,0,,{\c&HF2F4F6&}A THOUSAND YEARS AGO,
+Dialogue: 0,0:00:35.84,0:00:36.63,Sub,,0,0,0,,{\c&HF2F4F6&}ONE DRAGON
+Dialogue: 0,0:00:36.63,0:00:38.15,Sub,,0,0,0,,{\c&HF2F4F6&}{\c&H2A8CFF&}BURNED THE WHOLE WORLD{\c&HF2F4F6&}.
+Dialogue: 0,0:00:38.45,0:00:40.22,Sub,,0,0,0,,{\c&HF2F4F6&}ITS BONES WERE {\c&H2A8CFF&}NEVER FOUND{\c&HF2F4F6&}.
+Dialogue: 0,0:00:40.55,0:00:42.08,Sub,,0,0,0,,{\c&HF2F4F6&}UNTIL YOU FLEW {\c&H2A8CFF&}HOME{\c&HF2F4F6&}.
+Dialogue: 0,0:00:42.60,0:00:43.54,Sub,,0,0,0,,{\c&HF2F4F6&}SAME HORNS.
+Dialogue: 0,0:00:43.54,0:00:44.48,Sub,,0,0,0,,{\c&HF2F4F6&}SAME SCARS.
+Dialogue: 0,0:00:44.48,0:00:45.45,Sub,,0,0,0,,{\c&HF2F4F6&}SAME {\c&H2A8CFF&}FIRE{\c&HF2F4F6&}.
+Dialogue: 0,0:00:46.10,0:00:47.56,Sub,,0,0,0,,{\c&HF2F4F6&}YOU SPENT YOUR WHOLE LIFE
+Dialogue: 0,0:00:47.56,0:00:49.57,Sub,,0,0,0,,{\c&HF2F4F6&}BECOMING THE {\c&H2A8CFF&}MONSTER{\c&HF2F4F6&} THEY FEARED...
+Dialogue: 0,0:00:49.85,0:00:50.96,Sub,,0,0,0,,{\c&HF2F4F6&}ONLY TO DISCOVER
+Dialogue: 0,0:00:50.96,0:00:52.20,Sub,,0,0,0,,{\c&HF2F4F6&}YOU {\c&H2A8CFF&}ALREADY WERE{\c&HF2F4F6&}.
+Dialogue: 0,0:00:54.80,0:00:58.50,Title,,0,0,0,,{\fad(400,0)}WHAT IF YOU WERE\NBORN AS A DRAGON?
+Dialogue: 0,0:00:55.40,0:00:58.50,Ask,,0,0,0,,{\fad(400,0)}WHAT SHOULD YOU\NBE BORN AS NEXT?\N{\fs40}{\c&H2A8CFF&}TELL ME IN THE COMMENTS
