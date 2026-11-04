@@ -3,7 +3,10 @@ import * as THREE from 'three';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 THREE.ColorManagement.enabled = false; // author colours as plain display values (no sRGB->linear)
 
-export const W = 360, H = 640;   // internal resolution (upscaled 3x to 1080x1920)
+// internal resolution (upscaled to 1080x1920). A project may set window.LP_RES / LP_BITS / LP_AFFINE before loading (defaults: 360x640, 15-bit, 0.85).
+const LP = globalThis.LP_RES || [360, 640];
+export const W = LP[0], H = LP[1];
+const LP_BITS = (globalThis.LP_BITS || 31).toFixed(1), LP_AFFINE = globalThis.LP_AFFINE ?? 0.85;
 export const FPS = 30;
 
 export const renderer = new THREE.WebGLRenderer({ antialias: false, alpha: false, powerPreference: 'high-performance' });
@@ -144,7 +147,7 @@ export function mat(o = {}) {
       map: { value: o.map || null }, uHasMap: { value: o.map ? 1 : 0 },
       emap: { value: o.emap || null }, uHasEmap: { value: o.emap ? 1 : 0 },
       uRepeat: { value: new THREE.Vector2(...(o.repeat || [1, 1])) },
-      uAffine: { value: o.affine ?? 0.85 },
+      uAffine: { value: o.affine ?? LP_AFFINE },
       uColor: { value: new THREE.Color(o.color ?? 0xffffff) },
       uEmissive: { value: new THREE.Color(o.emissive ?? 0x000000) },
       uEmitFogPierce: { value: o.pierce ?? 2.0 },
@@ -399,8 +402,8 @@ void main(){
   c = mix(c, uFlashCol, uFlash);
   c *= 1.0 - uFade;
   ivec2 px = ivec2(gl_FragCoord.xy);
-  c += (bayer4(px) - 0.5) / 31.0;
-  c = floor(clamp(c, 0.0, 1.0) * 31.0 + 0.5) / 31.0;  // 15-bit colour
+  c += (bayer4(px) - 0.5) / ${LP_BITS};
+  c = floor(clamp(c, 0.0, 1.0) * ${LP_BITS} + 0.5) / ${LP_BITS};  // 15-bit colour (default)
   gl_FragColor = vec4(c, 1.0);
 }`,
   depthTest: false, depthWrite: false,
