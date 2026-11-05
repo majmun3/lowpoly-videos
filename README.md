@@ -19,5 +19,6 @@ Original low-poly / retro-3D (PS1/PS2-style) short videos: the **VHALDREN** dark
 | [WHAT IF YOU WERE BORN AS A VAMPIRE?](born-as-a-vampire/) | [`what_if_you_were_born_as_a_vampire.mp4`](born-as-a-vampire/output/what_if_you_were_born_as_a_vampire.mp4) |
 | [WHAT IF DRAGONS STILL EXISTED?](dragons-still-existed/) | [`what_if_dragons_still_existed.mp4`](dragons-still-existed/output/what_if_dragons_still_existed.mp4) |
 | [BEING BORN AS A BLACKSMITH IN MEDIEVAL TIMES WAS HORRIFYING](born-a-blacksmith/) | [`being_born_as_a_blacksmith_in_medieval_times_was_horrifying.mp4`](born-a-blacksmith/output/being_born_as_a_blacksmith_in_medieval_times_was_horrifying.mp4) |
+| [DARK FANTASY CINEMATIC (30 s, silent)](dark-fantasy-cinematic/) | [`dark_fantasy_cinematic_30s.mp4`](dark-fantasy-cinematic/output/dark_fantasy_cinematic_30s.mp4) |
 
 **Cael Vorn's permanent design (Episode 3 onward):** [`CAEL_VORN_CANON.md`](CAEL_VORN_CANON.md), built by `buildCaelVigil()` in [`the-forgotten-armory/render/src/vigil.js`](the-forgotten-armory/render/src/vigil.js).

@@ -40,7 +40,7 @@ export function smithMaterials(o = {}) {
 }
 
 // ---------------------------------------------------------------- hands: palm + four two-segment fingers + thumb (curl 0..1)
-function buildHand(parent, M, side, k, glove) {
+export function buildHand(parent, M, side, k, glove) {
   const s = side === 'R' ? -1 : 1;           // curl direction (towards the body's midline)
   const m = glove ? M.glove : M.hands; const H = { fingers: [], s };
   mesh(box(0.042 * k, 0.1 * k, 0.092 * k, 'top'), m, parent, [0, 0, 0]);
