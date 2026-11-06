@@ -6,5 +6,8 @@
         "repo": "DietrichGebert/ponytail"
       }
     }
+  },
+  "enabledPlugins": {
+    "ponytail@ponytail": true
   }
 }
