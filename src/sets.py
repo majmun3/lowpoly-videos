@@ -78,13 +78,9 @@ def rock(name, loc, s, m, seed=0):
 
 
 # ---------------------------------------------------------------- architecture
-def crenels(cx, cy, z, rx, ry, n, size, mi, round_=False):
-    out = []
-    for i in range(n):
-        if round_:
-            a = 2 * math.pi * i / n
-            out.append((*box(size, size, size * 1.2, (cx + rx * math.cos(a), cy + ry * math.sin(a), z + size * 0.6)), mi))
-    return out
+def crenels(cx, cy, z, rx, ry, n, size, mi):
+    """Ring of merlons around a round tower top."""
+    return [(*box(size, size, size * 1.2, (cx + rx * math.cos(2 * math.pi * i / n), cy + ry * math.sin(2 * math.pi * i / n), z + size * 0.6)), mi) for i in range(n)]
 
 
 def tower(c, r, h, mi_wall, mi_roof, mi_win, spire=True, rnd=None, crenel=True, broken=0.0, windows=3):
@@ -94,7 +90,7 @@ def tower(c, r, h, mi_wall, mi_roof, mi_win, spire=True, rnd=None, crenel=True, 
     if broken:
         P = [(*loft([(z, r, r, x, y), (z + h * (1 - broken), r, r, x, y)], 8), mi_wall)]
     elif crenel:
-        P += crenels(x, y, z + h, r * 1.1, r * 1.1, 8, r * 0.35, mi_wall, round_=True)
+        P += crenels(x, y, z + h, r * 1.1, r * 1.1, 8, r * 0.35, mi_wall)
     if spire and not broken:
         P.append((*cone(r * 1.2, h * 0.55, 8, (x, y, z + h)), mi_roof))
         P.append((*cone(0.08 * r, h * 0.12, 4, (x, y, z + h * 1.55)), mi_roof))
@@ -251,7 +247,7 @@ def rain(name, center, size, count, f0, f1, speed=14.0, seed=0, color=(0.45, 0.5
     for layer in range(2):
         V, F = [], []
         for i in range(count // 2):
-            x, y, z = rnd.uniform(-sx / 2, sx / 2), rnd.uniform(-sy / 2, sy / 2), rnd.uniform(0, sz)
+            x, y, z = rnd.uniform(-sx / 2, sx / 2), rnd.uniform(-sy / 2, sy / 2), rnd.uniform(0, 2 * sz)   # 2x tall so [0,sz] is always covered
             L = rnd.uniform(0.5, 0.9)
             for (dx, dy) in ((0.012, 0), (0, 0.012)):
                 k = len(V)
@@ -306,20 +302,6 @@ def fog_sheet(name, loc, size, color, strength, f0, f1, drift=(0.5, 0, 0), seed=
             o.keyframe_insert('location', frame=f)
         out.append(o)
     return out
-
-
-def linear(objs):
-    """Make every keyed curve on these objects linear (constant-speed drift)."""
-    for o in objs:
-        ad = o.animation_data
-        if not ad or not ad.action:
-            continue
-        for layer in ad.action.layers:
-            for strip in layer.strips:
-                for cb in strip.channelbags:
-                    for fc in cb.fcurves:
-                        for kp in fc.keyframe_points:
-                            kp.interpolation = 'LINEAR'
 
 
 def billboard_glow(name, loc, r, color, strength, parent=None):

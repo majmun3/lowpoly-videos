@@ -4,6 +4,7 @@
 set -euo pipefail
 PY=${1:-/opt/bvenv/bin/python}
 cd "$(dirname "$0")"
+[ -n "${RESUME:-}" ] || rm -rf build/frames   # never reuse frames from an older build
 mkdir -p build/frames out
 "$PY" src/build.py out/knight_dark_fantasy.blend
 for n in 1 2 3 4 5 6 7 8; do

@@ -425,7 +425,7 @@ def bake(rig, f0, f1, fn, start=(0, 0), heading=0.0, locomote=False, ground=0.0,
             x, y = path(f); delta = Vector((x, y, 0)) - Vector((pos.x, pos.y, 0)); pos.x, pos.y = x, y
         elif locomote and prev is not None:
             d = (prev[st][0] - legs[st][0]) * sc
-            dirv = Vector((-math.sin(R(h)), -math.cos(R(h)), 0))  # character forward = local -Y
+            dirv = Vector((math.sin(R(h)), -math.cos(R(h)), 0))  # character forward = local -Y rotated by heading
             pos += dirv * d
         prev = legs
         hz = legs[st][1]
@@ -663,7 +663,7 @@ def sparks(name, f0, pos, mat_, n=14, seed=1, spread=2.5, life=10, size=0.04):
             o.rotation_euler = (k, k * 0.7, 0); o.keyframe_insert('rotation_euler', frame=f0 + k)
         o.scale = (0, 0, 0); o.keyframe_insert('scale', frame=f0 + L + 1)
         out.append(o)
-    fl = obj(name + '_flash', [(*sphere(0.25, 6, 4), 0)], [mat_], loc=pos)
+    fl = obj(name + '_flash', [(*sphere(size * 2.5, 6, 4), 0)], [mat_], loc=pos)
     for f, s in ((f0 - 1, 0), (f0, 1.3), (f0 + 1, 0.9), (f0 + 2, 0.3), (f0 + 3, 0)):
         fl.scale = (s,) * 3; fl.keyframe_insert('scale', frame=f)
     return out

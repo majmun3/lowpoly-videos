@@ -81,25 +81,25 @@ def scene5():
     rain('rain', (0, 18, 0), (40, 50, 18), 5000, 1, 240, speed=18)
     light('sun', 'SUN', rot=(R(60), 0, R(150)), color=(0.6, 0.65, 0.8), energy=1.0)
     fsun = light('flash_sun', 'SUN', rot=(R(35), 0, R(190)), color=(0.8, 0.85, 1.0), energy=0, shadow=False)
-    flashes(sc, [(28, 1.0), (92, 0.7), (150, 0.8), (200, 1.0), (228, 0.6)], 240, lights=[(fsun, 4.0)])
+    flashes(sc, [(28, 0.6), (92, 0.45), (150, 0.5), (200, 0.65), (228, 0.4)], 240, lights=[(fsun, 3.0)])
     bolt('bolt1', (-20, 110, 70), (-10, 75, 0), [28, 150], seed=4, width=0.6)
     bolt('bolt2', (25, 120, 70), (12, 80, 0), [92, 200, 228], seed=5, width=0.6)
     # giant skeleton clawing out of the crypt
-    gs = giant_skeleton('giant', m, scale=6.0)
+    gs = giant_skeleton('giant', m, scale=7.5)
 
     def giant_pose(f):
         t = f / FPS
         rise = smooth(f / 230)
         roar = smooth((f - 196) / 10) * (1 - smooth((f - 232) / 8))
-        p = P(_ground=0.0, _lift=lerp(-1.75, -0.62, rise),
-              torso=(lerp(55, 15, rise) - 25 * roar, 0, 8 * math.sin(t * 0.9)), head=(-30 * roar - 10 + 8 * math.sin(t * 1.3), 0, 15 * math.sin(t * 0.7) * (1 - roar)),
+        p = P(_ground=0.0, _lift=lerp(-1.55, -0.2, rise),
+              torso=(lerp(45, 5, rise) - 25 * roar, 0, 8 * math.sin(t * 0.9)), head=(-30 * roar - 10 + 8 * math.sin(t * 1.3), 0, 15 * math.sin(t * 0.7) * (1 - roar)),
               upper_arm_L=arm('L', 95 + 20 * math.sin(t * 1.5), 25 + 40 * roar), forearm_L=(-40 - 30 * math.sin(t * 1.5), 0, 0),
               upper_arm_R=arm('R', 80 + 25 * math.sin(t * 1.5 + 2), 25 + 40 * roar), forearm_R=(-50 - 30 * math.sin(t * 1.5 + 2), 0, 0),
               hand_L=(-30, 0, 0), hand_R=(-30, 0, 0))
         return p
     bake(gs, 1, 240, giant_pose, start=(0, 62), heading=0, ground=flat(0, 62))
     glow_eye = glow_mat('ghost_green', (0.3, 1.0, 0.4), 1.5)
-    obj('giant_eyeglow', [(*sphere(0.35, 6, 4), 0)], [glow_eye], parent=gs.p['head'], loc=(0, -0.11, 0.2))
+    obj('giant_eyeglow', [(*sphere(0.06, 6, 4, (sx * 0.04, 0, 0)), 0) for sx in (-1, 1)], [glow_eye], parent=gs.p['head'], loc=(0, -0.11, 0.2))
     # background battle: soldier vs undead pairs
     pairs = [(-7, 20), (6, 24), (-3, 32), (10, 36), (-12, 28), (3, 44), (-8, 48)]
     for i, (x, y) in enumerate(pairs):
@@ -109,13 +109,13 @@ def scene5():
         a1 = [off + 10 + k * 56 for k in range(5)]
         a2 = [off + 38 + k * 56 for k in range(5)]
         ang = rnd.uniform(-60, 60)
-        dx, dy = -math.sin(R(ang)) * 0.75, -math.cos(R(ang)) * 0.75
-        bake(so, 1, 240, lambda f, a1=a1, a2=a2: fight_loop(f, a1, block_frames=[a + 12 for a in a2]), start=(x - dx, y - dy), heading=ang + 180, ground=flat)
-        bake(un, 1, 240, lambda f, a1=a1, a2=a2: fight_loop(f, a2, block_frames=[a + 12 for a in a1]), start=(x + dx, y + dy), heading=ang, ground=flat)
+        dx, dy = math.sin(R(ang)) * 0.75, -math.cos(R(ang)) * 0.75   # forward of heading ang
+        bake(so, 1, 240, lambda f, a1=a1, a2=a2: fight_loop(f, a1, block_frames=[a + 12 for a in a2]), start=(x + dx, y + dy), heading=ang + 180, ground=flat)
+        bake(un, 1, 240, lambda f, a1=a1, a2=a2: fight_loop(f, a2, block_frames=[a + 12 for a in a1]), start=(x - dx, y - dy), heading=ang, ground=flat)
     # soldiers running across (shot B background)
     for i in range(4):
         rr = soldier(f'runner{i}', m)
-        bake(rr, 50, 120, lambda f, i=i: run(f / 14 + i * 0.3), start=(-14 + i * 1.5, 14 + i * 2.5), heading=-90, locomote=True, ground=flat)
+        bake(rr, 50, 120, lambda f, i=i: run(f / 14 + i * 0.3), start=(-14 + i * 1.5, 14 + i * 2.5), heading=90, locomote=True, ground=flat)
         for f in range(50, 121):
             rr.p['upper_arm_R'].rotation_euler = (R(-50), 0, 0); rr.p['upper_arm_R'].keyframe_insert('rotation_euler', frame=f)
             rr.p['forearm_R'].rotation_euler = (R(-60), 0, 0); rr.p['forearm_R'].keyframe_insert('rotation_euler', frame=f)
@@ -169,7 +169,7 @@ def scene5():
 
 # ====================================================================== SCENE 6
 def scene6():
-    sc = new_scene('S6_MonstersOfTheWorld', 192, fog=(0.12, 0.06, 0.16), near=4, far=75, ambient=(0.08, 0.05, 0.1),
+    sc = new_scene('S6_MonstersOfTheWorld', 192, fog=(0.1, 0.05, 0.14), near=10, far=120, ambient=(0.08, 0.05, 0.1),
                    sky_top=(0.02, 0.01, 0.04), sky_hor=(0.2, 0.08, 0.25), clouds=0.4)
     m, s = M(), sm()
     h = hfield(11, 0.5, 0.1)
@@ -183,7 +183,7 @@ def scene6():
         x = rnd.choice((-1, 1)) * rnd.uniform(2.5, 12); y = rnd.uniform(-5, 60)
         rock(f'rock{i}', (x, y, path(x, y)), rnd.uniform(0.4, 1.4), s['rock'], seed=i)
     for k, (y0, f0) in enumerate(((-5, 1), (8, 1), (30, 1))):
-        fog_sheet(f'pfog{k}', (0, y0 + 10, 0.3), (60, 30), (0.5, 0.2, 0.7), 0.25, 1, 192, drift=(0.6, 0.2, 0), n=3, dz=0.7)
+        fog_sheet(f'pfog{k}', (0, y0 + 10, 0.15), (60, 30), (0.5, 0.2, 0.7), 0.05, 1, 192, drift=(0.6, 0.2, 0), n=3, dz=0.7)
     # ruined castle on cliff with perched dragon
     mountain('cliff', (0, 92, -2), 22, 18, s['rock'], seed=7, sides=8)
     castle('ruins', (0, 92, 15), 0.55, s, ruined=True, seed=9)
@@ -213,13 +213,13 @@ def scene6():
     wr = wraith('wraith', m['cloak'], m['bone'], m['eye_green'])
     for f in range(1, 65):
         t = f / 64
-        wr.root.location = (lerp(10, -9, t), 9 + 2 * math.sin(t * 3), 0.9 + 0.25 * math.sin(f * 0.12))
+        wr.root.location = (lerp(5, -5, t), 5.5 + 1.2 * math.sin(t * 3), 0.8 + 0.25 * math.sin(f * 0.12))
         wr.root.rotation_euler = (R(8), R(6 * math.sin(f * 0.1)), R(-80 + 30 * t))
         wr.root.keyframe_insert('location', frame=f); wr.root.keyframe_insert('rotation_euler', frame=f)
         for sd, sx in (('L', 1), ('R', -1)):
             wr.p['arm_' + sd].rotation_euler = (R(-30 - 15 * math.sin(f * 0.15 + sx)), R(sx * -15), 0)
             wr.p['arm_' + sd].keyframe_insert('rotation_euler', frame=f)
-    billboard_glow('wraith_glow', (0, 0, 1.2), 1.1, (0.4, 0.15, 0.6), 0.25, parent=wr.root)
+    billboard_glow('wraith_glow', (0, 0, 1.2), 1.0, (0.4, 0.15, 0.6), 0.08, parent=wr.root)
     hide_between(all_objs(wr), 1, 65)
     # demon between the trees
     dm = demon('demon', m, scale=3.4)
@@ -237,15 +237,14 @@ def scene6():
         p['forearm_R'] = (lerp(-25, -40, reach), 0, 0); p['hand_R'] = (-30 * reach, 0, 0)
         p['thigh_L'] = (-8, 0, -5); p['thigh_R'] = (8, 0, 5); p['shin_L'] = (10, 0, 0); p['shin_R'] = (14, 0, 0)
         return p
-    bake(dm, 65, 128, demon_pose, start=(1.6, 21), heading=-8, ground=path)
+    bake(dm, 65, 128, demon_pose, start=(1.4, 18.5), heading=-8, ground=path)
     for f in range(65, 129, 2):   # breathing chest
         k = 1 + 0.04 * math.sin(f / FPS * 2.4)
         dm.p['torso'].scale = (k, k, 1); dm.p['torso'].keyframe_insert('scale', frame=f)
     obj('demon_tail', [(*tube([(0, 0.1, 0), (0, 0.5, -0.4), (0.3, 0.9, -0.8), (0.1, 1.3, -1.0)], [0.08, 0.06, 0.04, 0.005], 5), 0)], [m['demon']], parent=dm.p['hips'])
-    billboard_glow('demon_glow', (0, -0.1, 0.2), 0.25, (1.0, 0.2, 0.05), 0.5, parent=dm.p['head'])
     hide_between(all_objs(dm), 65, 129)
     # dragon on the ruins
-    dr = dragon('dragon', m['scales'], m['belly'], m['wing'], m['horn'], m['eye_red'], scale=1.7, loc=(0, 92, 15 + 0.2 + 1.75 * 1.7), heading=-5)
+    dr = dragon('dragon', m['scales'], m['belly'], m['wing'], m['horn'], m['eye_red'], scale=1.7, loc=(0, 92.5, 15 + 26 * 0.55 + 1.75 * 1.7), heading=-5)
     for f in range(120, 193):
         unf = smooth((f - 146) / 22)
         roar = smooth((f - 168) / 8)
@@ -255,9 +254,9 @@ def scene6():
     ca, ta = camera('S6_cam_wraith', 26)
     follow_cam(ca, ta, kn, 1, 64, (-3.8, -1.2, 1.1), look=(2.0, 3.0, 1.4))
     cb, tb = camera('S6_cam_demon', 18)
-    shoot(cb, tb, 65, 128, [(65, (-0.6, 9.5, 0.6)), (128, (-1.0, 10.8, 0.35))], [(65, (0.4, 14, 1.3)), (92, (1.0, 18, 5)), (128, (1.6, 21, 8.5))])
+    shoot(cb, tb, 65, 128, [(65, (-0.8, 9.0, 0.6)), (128, (-1.2, 10.4, 0.35))], [(65, (0.3, 13.5, 1.3)), (92, (1.0, 16.5, 4.5)), (128, (1.3, 18.5, 6.4))])
     cc, tcc = camera('S6_cam_dragon', 22)
-    shoot(cc, tcc, 129, 192, [(129, (1.6, 47, 0.7)), (192, (1.0, 50, 0.5))], [(129, (0, 60, 6)), (192, (0, 92, 22))])
+    shoot(cc, tcc, 129, 192, [(129, (1.8, 44, 0.8)), (192, (1.2, 47.5, 0.6))], [(129, (0, 62, 8)), (192, (0, 92, 33))], lens_keys=[(129, 22), (192, 26)])
     cut(sc, 1, ca); cut(sc, 65, cb); cut(sc, 129, cc)
     return sc
 
@@ -281,7 +280,8 @@ def fortress(m, s, gap=0.0):
         d = obj(f'door{sx}', D, [mat('door_wood', 'wood', (0.6, 0.5, 0.45), scale=0.7), m['rust']], loc=(sx * 5.0, 3.3, 0))
         doors.append(d)
     # mountain path terrain rising to the gate
-    terrain('mountain_path', (140, 160), (50, 60), s['rock'], h=lambda x, y: (abs(x) ** 1.3) * 0.25 + max(0, -y) * 0.0 + hfield(4, 0.6, 0.15)(x, y) * min(1, abs(x) / 5),
+    hf = hfield(4, 0.6, 0.15)
+    terrain('mountain_path', (140, 160), (50, 60), s['rock'], h=lambda x, y: (abs(x) ** 1.3) * 0.25 + hf(x, y) * min(1, abs(x) / 5),
             center=(0, -50))
     for i, (x, y, r, hh) in enumerate([(-80, 40, 60, 70), (85, 30, 60, 80), (0, 90, 90, 110), (-50, -40, 30, 25), (55, -60, 35, 30)]):
         mountain(f'mtn{i}', (x, y, -4), r, hh, s['rock'], seed=i + 30)
@@ -307,7 +307,7 @@ def scene7():
     m, s = M(), sm()
     fort, doors = fortress(m, s)
     for sx, d in zip((-1, 1), doors):
-        d.rotation_euler = (0, 0, R(sx * -6))     # ajar: a sliver of darkness
+        d.rotation_euler = (0, 0, R(sx * -16))     # ajar: a gap of darkness
     light('moon', 'SUN', rot=(R(50), 0, R(160)), color=(0.6, 0.5, 0.9), energy=1.2)
     fsun = light('flash_sun', 'SUN', rot=(R(30), 0, R(200)), color=(0.8, 0.5, 1.0), energy=0, shadow=False)
     flashes(sc, [(20, 1.0), (58, 0.8), (110, 0.9), (150, 1.0), (196, 0.8)], 216, lights=[(fsun, 4.0)])
@@ -319,6 +319,8 @@ def scene7():
     sheath = sword('sheathed_sword', m['steel'], m['gold'], m['leather'], length=0.9)
     attach(sheath, kn.p['hips'], (0.2, -0.05, -0.05), (-160, 0, 15))
 
+    reach_u, reach_f = aim_arm((0.25, -0.5, -0.8), (0.9, 0.1, -0.2), (0, -1, 0))
+
     def hero(f):
         if f <= 140:
             p = walk(f / 30, 0.85, lean=7)
@@ -327,12 +329,11 @@ def scene7():
         stop = smooth((f - 160) / 10)
         p = blend(walk(f / 30, 0.85 * (1 - stop), lean=7), idle(f, 0.4), stop)
         p['head'] = lerp(p['head'], (-8, 0, 0), stop)
-        reach_u, reach_f = aim_arm((0.25, -0.5, -0.8), (0.9, 0.1, -0.2), (0, -1, 0))
         reach = dict(p); reach['upper_arm_R'] = reach_u; reach['forearm_R'] = reach_f; reach['torso'] = (10, 0, 25)
         return ptrack([(141, p), (176, p), (188, reach), (192, reach), (204, add(GUARD, {'head': (-8, 0, 0)})), (216, add(GUARD, {'head': (-10, 0, 0)}))], f) if f > 176 else p
     bake(kn, 1, 80, hero, start=(0.0, -62), heading=180, locomote=True, ground=ground, wind=1.0)
     bake(kn, 81, 140, hero, start=(0.0, -40), heading=180, locomote=True, ground=ground, wind=1.0)
-    bake(kn, 141, 216, hero, start=(0.0, -21), heading=180, locomote=True, ground=ground, wind=1.0)
+    bake(kn, 141, 216, hero, start=(0.0, -15.5), heading=180, locomote=True, ground=ground, wind=1.0)
     for f, v in ((1, 1), (191, 1), (192, 0)):
         sheath.scale = (v,) * 3; sheath.keyframe_insert('scale', frame=f)
         sw.scale = (1 - v,) * 3; sw.keyframe_insert('scale', frame=f)
@@ -341,7 +342,7 @@ def scene7():
     for f in range(140, 217):
         t = smooth((f - 146) / 50)
         dr.root.location = (lerp(-34, 30, t), 15, 1.8 * 3.0)
-        dr.root.rotation_euler = (0, 0, R(-95))
+        dr.root.rotation_euler = (0, 0, R(95))
         dr.root.keyframe_insert('location', frame=f); dr.root.keyframe_insert('rotation_euler', frame=f)
         dr.set(dragon_pose(f, fold=1.0, neck=(10, -20), look=-40 * smooth((f - 170) / 15)), f)
     hide_between(all_objs(dr), 140)
@@ -351,7 +352,7 @@ def scene7():
     cb, tb = camera('S7_cam_track', 28)
     follow_cam(cb, tb, kn, 81, 140, lambda f: (-2.4 + (f - 81) * 0.008, -1.4 + (f - 81) * 0.02, 1.4), look=(0, 0, 1.5))
     cc, tcc = camera('S7_cam_gate', 26)
-    shoot(cc, tcc, 141, 216, [(141, (2.5, -26, 1.4)), (180, (1.2, -22, 0.9)), (216, (0.9, -17.2, 0.7))],
+    shoot(cc, tcc, 141, 216, [(141, (2.5, -23, 1.4)), (180, (1.4, -20.5, 0.9)), (216, (0.9, -18.6, 0.7))],
           [(141, (0, -15, 2.0)), (180, (0, 0, 5)), (216, (0, 0, 6))])
     cut(sc, 1, ca); cut(sc, 81, cb); cut(sc, 141, cc)
     return sc
@@ -385,13 +386,13 @@ def scene8():
         roar = smooth((f - 80) / 10)
         dr.root.location = (0, lerp(26, 12, come), 1.75 * 3.4)
         dr.root.keyframe_insert('location', frame=f)
-        dr.set(dragon_pose(f, flap=0.2 * roar, flap_speed=0.7, fold=1 - 0.8 * smooth((f - 60) / 25), jaw=roar, head_lift=lerp(-20, 30, come),
-                           neck=(lerp(10, -15, come), 0), legs='stand', breath=1.0), f)
+        dr.set(dragon_pose(f, flap=0.2 * roar, flap_speed=0.7, fold=1 - 0.8 * smooth((f - 60) / 25), jaw=roar, head_lift=lerp(-40, -18, come) + 8 * roar,
+                           neck=(lerp(45, 30, come), 0), legs='stand', breath=1.0), f)
         eye_light.data.energy = 3000 * come; eye_light.data.keyframe_insert('energy', frame=f)
     # cut to black
     ca, ta = camera('S8_cam', 22)
-    shoot(ca, ta, 1, 120, [(1, (7, -16, 1.6)), (50, (4, -18, 1.0)), (108, (0.7, -17.6, 0.55)), (120, (0.7, -17.6, 0.55))],
-          [(1, (0, 2, 6)), (60, (0, 3, 9)), (108, (0, 2, 13)), (120, (0, 2, 13))])
+    shoot(ca, ta, 1, 120, [(1, (-2.6, -22, 3.2)), (50, (-1.0, -19.5, 1.7)), (108, (1.5, -17.6, 1.1)), (120, (1.5, -17.6, 1.1))],
+          [(1, (0, 2, 6)), (60, (0, 3, 8)), (108, (-1, 2, 10)), (120, (-1, 2, 10))])
     card = obj('black_card', [quad(4, 4, (0, 0, -0.3), axis='XY')], [mat('black_card', None, (0, 0, 0), fog=0.0)], parent=ca)
     for f, v in ((1, 0), (108, 0), (109, 1)):
         card.scale = (v,) * 3; card.keyframe_insert('scale', frame=f)

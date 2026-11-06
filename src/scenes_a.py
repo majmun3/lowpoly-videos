@@ -107,7 +107,7 @@ def scene1():
     for f in range(85, 145):
         t = (f - 85) / 60          # crosses the moon disc around frame 115
         dr.root.location = (lerp(-60, 130, t), 395, 258 + 8 * math.sin(t * 3.0))
-        dr.root.rotation_euler = (R(8), R(-10 + 6 * math.sin(f * 0.25)), R(-95))
+        dr.root.rotation_euler = (R(8), R(-10 + 6 * math.sin(f * 0.25)), R(95))
         dr.root.keyframe_insert('location', frame=f); dr.root.keyframe_insert('rotation_euler', frame=f)
         dr.set(dragon_pose(f, flap=1.0, flap_speed=1.1, legs='tuck', breath=0.3), f)
     hide_between(all_objs(dr), 85)
@@ -128,7 +128,7 @@ def scene1():
 
 # ====================================================================== SCENE 2
 def scene2():
-    sc = new_scene('S2_ChildInACursedWorld', 168, fog=(0.08, 0.09, 0.1), near=12, far=230, ambient=(0.08, 0.08, 0.09),
+    sc = new_scene('S2_ChildInACursedWorld', 168, fog=(0.08, 0.09, 0.1), near=12, far=420, ambient=(0.08, 0.08, 0.09),
                    sky_top=(0.03, 0.035, 0.045), sky_hor=(0.12, 0.12, 0.13), clouds=0.4)
     m, s = M(), sm()
     h = hfield(5, 0.4, 0.07)
@@ -145,7 +145,6 @@ def scene2():
         rr = random.Random(i + 50)
         dead_tree(f'tree{i}', (rr.uniform(-60, -18), rr.uniform(-10, 60), 0), rr.uniform(5, 9), s['bark'], seed=i + 20)
     fence('cem_fence', (-17, 4, 0), (-17, 38, 0), s['wood'])
-    fence('fence_child', (-6, -6, 0), (-6, 6, 0), s['wood'])
     light('sun', 'SUN', rot=(R(62), 0, R(140)), color=(0.65, 0.7, 0.85), energy=1.3)
     fire('brazier', (6.5, 6, 0.9), 0.6, 1, 168, light_energy=120)
     obj('brazier_bowl', [(*loft([(0, 0.1, 0.1), (0.8, 0.08, 0.08), (0.95, 0.4, 0.4)], 6), 0)], [m['rust']], loc=(6.5, 6, 0))
@@ -169,7 +168,7 @@ def scene2():
         p['forearm_R'] = lerp((-12, 0, 0), raise_f, w)
         p['head'] = (-12 * w - 4, 0, 0)
         return p
-    bake(kid, 1, 112, kid_pose, start=(-5.0, 0.0), heading=-90)
+    bake(kid, 1, 112, kid_pose, start=(-5.0, 0.0), heading=90)
     bake(kid, 113, 168, kid_pose, start=(0.5, 20.0), heading=180)
     # marching soldiers (column crossing the street, moving -X ... toward the castle road)
     for i in range(5):
@@ -190,7 +189,7 @@ def scene2():
     # goblin peeking from behind a tree, then fleeing into the forest
     gb = goblin('goblin', m)
     dead_tree('goblin_tree', (-19, 4, 0), 7, s['bark'], seed=77)
-    gh = lambda f: track([(91, -60.0), (95, 120.0)], f)
+    gh = lambda f: track([(91, 60.0), (95, -120.0)], f)
 
     def gob_pose(f):
         if f < 92:
@@ -203,11 +202,11 @@ def scene2():
     hide_between(all_objs(gb), 66, 113)
     # cameras
     ca, ta = camera('S2_cam_soldiers', 30)
-    shoot(ca, ta, 1, 64, [(1, (-7.6, -0.6, 0.85)), (64, (-7.3, 0.4, 0.9))], [(1, (4, -4, 1.2)), (64, (4, 3, 1.3))])
+    shoot(ca, ta, 1, 64, [(1, (-7.4, -1.0, 1.0)), (64, (-7.2, -0.4, 1.05))], [(1, (4, 1.5, 0.9)), (64, (4, 4.5, 1.1))])
     cb, tb = camera('S2_cam_cemetery', 32)
-    shoot(cb, tb, 65, 112, [(65, (-8, -4, 1.6)), (112, (-9, -2, 1.8))], [(65, (-28, 20, 1.5)), (84, (-24, 12, 1.4)), (112, (-24, 5, 1.2))])
+    shoot(cb, tb, 65, 112, [(65, (-13.6, -3.5, 1.6)), (112, (-14.2, -2.5, 1.7))], [(65, (-28, 20, 1.5)), (84, (-24, 12, 1.4)), (112, (-24, 5, 1.2))])
     cc, tcc = camera('S2_cam_castle', 26)
-    shoot(cc, tcc, 113, 168, [(113, (1.0, 17.0, 0.55)), (168, (0.7, 18.2, 0.5))], [(113, (0.3, 25, 1.4)), (168, (0, 120, 30))])
+    shoot(cc, tcc, 113, 168, [(113, (1.0, 17.0, 0.55)), (168, (0.7, 18.2, 0.5))], [(113, (0.3, 25, 1.4)), (168, (0, 120, 28))], lens_keys=[(113, 26), (168, 34)])
     cut(sc, 1, ca); cut(sc, 65, cb); cut(sc, 113, cc)
     return sc
 
@@ -227,7 +226,8 @@ def scene3():
     obj('pen', [(*box(10, 0.6, 7, (0, 15, 3.5)), 0), (*box(10, 6, 0.6, (0, 12, 7)), 0)] +
         [(*box(0.15, 0.15, 6.4, (x, 9.2, 3.2)), 1) for x in [-4.5 + k * 0.75 for k in range(13)] if abs(x) > 0.5 or True],
         [s['stone_dark'], m['rust']])
-    bst = beast('beast', mat('beast_hide', 'scales', (0.55, 0.55, 0.5), scale=0.8, seed=5), m['horn'], m['eye_red'], m['dark'], scale=1.6)
+    light('pen_light', 'POINT', (0, 10.5, 5.5), (1.0, 0.45, 0.2), 500, shadow=False)
+    bst = beast('beast', mat('beast_hide', 'scales', (1.1, 1.0, 0.9), scale=0.8, seed=5), m['horn'], m['eye_red'], m['dark'], scale=1.6)
     chain_m = mat('chain', 'chain', scale=4)
 
     def beast_pose(f):
@@ -291,13 +291,13 @@ def scene3():
         # three strikes on the dummy
         return ptrack([(111, GUARD), (113, GUARD)], f) if f < 113 else (
             swing(f, 113) if f < 141 else swing(f, 141) if f < 169 else GUARD)
-    bake(teen, 1, 168, teen_pose, path=lambda f: (0.0, 0.0) if f <= 110 else (2.25, 2.85), heading=lambda f: 90 if f <= 110 else -143)
+    bake(teen, 1, 168, teen_pose, path=lambda f: (0.0, 0.0) if f <= 110 else (2.25, 2.85), heading=lambda f: -90 if f <= 110 else 143)
 
     def old_pose(f):
         if f <= 70:
             return blend(swing(f, 8, TG), swing(f, 34, TG), 1.0 if f >= 34 else 0.0)
         return add(idle(f, 0.3), {'upper_arm_R': arm('R', 30, 10), 'forearm_R': (-60, 0, 0), 'head': (12, 0, 0)})
-    bake(old, 1, 168, old_pose, start=(-1.35, 0.15), heading=-90)
+    bake(old, 1, 168, old_pose, start=(-1.35, 0.15), heading=90)
     # dummy recoils on hits (frames ~125 and ~153)
     for f in range(111, 169):
         a = sum(math.exp(-(f - hf) / 5) * math.sin((f - hf) * 0.9) * 12 for hf in (125, 153) if f >= hf)
@@ -310,7 +310,7 @@ def scene3():
     sparks('clash2', 46, (-0.65, 0.0, 1.35), spk, n=10, seed=2, spread=2.5, size=0.025)
     # cameras
     ca, ta = camera('S3_cam_spar', 30)
-    shoot(ca, ta, 1, 70, [(1, (-0.5, -5.2, 1.4)), (70, (0.3, -4.0, 1.0))], [(1, (-0.6, 0, 1.1)), (50, (-0.4, 0, 1.0)), (70, (0.2, 0, 0.5))], shake=0.01)
+    shoot(ca, ta, 1, 70, [(1, (-0.6, -3.4, 1.3)), (70, (0.2, -2.8, 0.9))], [(1, (-0.6, 0, 1.1)), (50, (-0.4, 0, 1.0)), (70, (0.2, 0, 0.5))], shake=0.01)
     cb, tb = camera('S3_cam_rise', 22)
     shoot(cb, tb, 71, 110, [(71, (2.6, -1.2, 0.35)), (110, (2.4, -1.6, 0.45))], [(71, (0.6, 0.0, 0.4)), (110, (0.0, 0.0, 1.6))])
     cc, tcc = camera('S3_cam_dummy', 30)
@@ -354,9 +354,6 @@ def scene4():
         billboard_glow(f'candle_glow{i}', (x, y, 1.75), 0.18, (1.0, 0.5, 0.15), 0.5)
         light(f'candle_l{i}', 'POINT', (x, y, 2.0), (1.0, 0.6, 0.3), 40, shadow=False, radius=8)
     # god rays through the windows
-    ray = glow_mat('ray', (0.9, 0.8, 0.95), 0.07)
-    for i, y in enumerate((-8.5, 1.5, 11.5)):
-        obj(f'ray{i}', [(xf(box(1.4, 1.4, 16)[0], rot=(0, R(-38), 0)), box(1, 1, 1)[1], 0)], [ray], loc=(-1.0, y, 5.5))
     light('window_key', 'SUN', rot=(R(50), R(0), R(-60)), color=(0.65, 0.6, 0.9), energy=1.2)
     light('altar_light', 'SPOT', (0, 10, 9), (1.0, 0.8, 0.6), 1800, rot=(R(30), 0, R(180)), size=0.3).data.spot_size = R(50)
     # king & knight
@@ -401,9 +398,9 @@ def scene4():
     cc, tcc = camera('S4_cam_orbit', 26)
     orbit = []
     for k in range(9):
-        a = math.radians(20 + k * 22.5)
-        rr = 3.4 - k * 0.12
-        orbit.append((125 + k * 8.4, (math.sin(a) * rr, 12.3 - math.cos(a) * rr, 1.3 - 0.75 * k / 8)))
+        a = math.radians(20 + k * 65 / 8)          # behind (cape, BBL) -> low side profile
+        rr = 3.2 - k * 0.08
+        orbit.append((125 + k * 8.4, (math.sin(a) * rr, 12.3 - math.cos(a) * rr, 1.3 - 0.45 * k / 8)))
     shoot(cc, tcc, 125, 192, orbit, [(125, (0, 12.3, 1.0)), (160, (0, 12.3, 1.5)), (192, (0, 12.3, 1.85))])
     cut(sc, 1, ca); cut(sc, 65, cb); cut(sc, 125, cc)
     return sc

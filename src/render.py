@@ -6,6 +6,10 @@ import bpy
 blend, prefix, out = sys.argv[1], sys.argv[2], sys.argv[3]
 bpy.ops.wm.open_mainfile(filepath=blend)
 sc = next(s for s in bpy.data.scenes if s.name.startswith(prefix + '_'))
+# only the active scene gets re-evaluated per frame in background mode: drop the others (file is not saved)
+for other in list(bpy.data.scenes):
+    if other != sc:
+        bpy.data.scenes.remove(other)
 frames = []
 for a in sys.argv[4:]:
     if '-' in a:
